@@ -38,11 +38,11 @@ class Curl
 	/**
 	 *
 	 * @param string $url
-	 * @param string $data
+	 * @param array  $data
 	 * @type string  $type
 	 * @return mixed
 	 */
-	public static function post($url, $data, $type = 'json')
+	public static function post(string $url, array $data, string $type = 'json')
 	{
 		$data_string = json_encode($data, JSON_UNESCAPED_UNICODE);
 		$ch          = curl_init();
