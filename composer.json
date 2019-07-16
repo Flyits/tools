@@ -3,6 +3,7 @@
     "description": "常用的一些方法集合",
     "type": "library",
     "license": "Apache-2.0",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "flyits",
