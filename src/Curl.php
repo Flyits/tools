@@ -12,10 +12,11 @@ namespace flyits\tool;
 class Curl
 {
 	/**
-	 * @param $url
+	 * @param string $url
+	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @return bool|mixed
 	 */
-	public static function get(string $url)
+	public static function get(string $url, int $return = 0)
 	{
 		$ch = curl_init();
 		if (stripos($url, "https://") !== FALSE) {
@@ -25,14 +26,10 @@ class Curl
 		}
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$sContent = curl_exec($ch);
-		$aStatus  = curl_getinfo($ch);
+		$result['body'] = curl_exec($ch);
+		$result['info'] = curl_getinfo($ch);
 		curl_close($ch);
-		if (intval($aStatus["http_code"]) == 200) {
-			return $sContent;
-		} else {
-			return false;
-		}
+		return $return ? $return : $result['body'];
 	}
 	
 	/**
@@ -40,9 +37,10 @@ class Curl
 	 * @param string $url
 	 * @param array  $data
 	 * @type string  $type
+	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @return mixed
 	 */
-	public static function post(string $url, array $data, string $type = 'json')
+	public static function post(string $url, array $data, string $type = 'json', int $return = 0)
 	{
 		$data_string = json_encode($data, JSON_UNESCAPED_UNICODE);
 		$ch          = curl_init();
@@ -59,14 +57,10 @@ class Curl
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array($typeList[$type]));
-		$sContent = curl_exec($ch);
-		$aStatus  = curl_getinfo($ch);
+		$result['body'] = curl_exec($ch);
+		$result['info'] = curl_getinfo($ch);
 		curl_close($ch);
-		if (intval($aStatus["http_code"]) == 200) {
-			return $sContent;
-		} else {
-			return false;
-		}
+		return $return ? $return : $result['body'];
 		
 	}
 }
