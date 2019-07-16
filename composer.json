@@ -1,0 +1,22 @@
+{
+    "name": "flyits/tools",
+    "description": "常用的一些方法集合",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "flyits",
+            "email": "1424071037@qq.com"
+        }
+    ],
+    "require": {
+        "ext-curl": "^7.2",
+        "php": "^7.1",
+        "ext-json": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "flyits\\tool\\": "src"
+        }
+    }
+}
