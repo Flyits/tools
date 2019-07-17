@@ -40,7 +40,7 @@ class Curl
 	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @return mixed
 	 */
-	public static function post(string $url, array $data, string $type = 'json', int $return = 0)
+	public static function post(string $url, array $data = [], string $type = 'json', int $return = 0)
 	{
 		$data_string = json_encode($data, JSON_UNESCAPED_UNICODE);
 		$ch          = curl_init();
