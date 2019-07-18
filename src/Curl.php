@@ -63,4 +63,34 @@ class Curl
 		return $return ? $return : $result['body'];
 		
 	}
+	
+	/**
+	 * 上传文件
+	 * @param string $url
+	 * @param array  $data
+	 * @param string $file
+	 * @param int    $return 返回响应数据或包含状态等全部数据
+	 * @author flyits
+	 * @time   2019/7/17 17:34
+	 * @throws
+	 * @return mixed
+	 */
+	public static function postFile(string $url, array $data, string $file = 'media', int $return = 0)
+	{
+		$ch = curl_init($url);
+		//判断PHP版本,以便使用兼容curl文件上传
+		if (class_exists('CURLFile')) {
+			$data[$file] = new \CURLFile($data[$file], '', '');
+			curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
+		} else {
+			$data[$file] = "@" . $data[$file];
+		}
+		//        var_dump($file);exit();
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result['body'] = curl_exec($ch);
+		$result['info'] = curl_getinfo($ch);
+		curl_close($ch);
+		return $return ? $return : $result['body'];
+	}
 }
