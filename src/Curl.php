@@ -29,7 +29,7 @@ class Curl
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
 		curl_close($ch);
-		return $return ? $return : $result['body'];
+		return $return ? $result : $result['body'];
 	}
 	
 	/**
@@ -60,7 +60,7 @@ class Curl
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
 		curl_close($ch);
-		return $return ? $return : $result['body'];
+		return $return ? $result : $result['body'];
 		
 	}
 	
@@ -68,7 +68,7 @@ class Curl
 	 * 上传文件
 	 * @param string $url
 	 * @param array  $data
-	 * @param string $file
+	 * @param string $file   请求数组中文件路径参数的下标/键名
 	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @author flyits
 	 * @time   2019/7/17 17:34
@@ -91,6 +91,6 @@ class Curl
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
 		curl_close($ch);
-		return $return ? $return : $result['body'];
+		return $return ? $result : $result['body'];
 	}
 }
