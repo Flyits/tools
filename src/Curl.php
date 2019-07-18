@@ -28,6 +28,9 @@ class Curl
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
+		if (curl_errno($ch)) {
+			$result['error'] = curl_error($ch);
+		}
 		curl_close($ch);
 		return $return ? $result : $result['body'];
 	}
@@ -59,6 +62,9 @@ class Curl
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array($typeList[$type]));
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
+		if (curl_errno($ch)) {
+			$result['error'] = curl_error($ch);
+		}
 		curl_close($ch);
 		return $return ? $result : $result['body'];
 		
@@ -80,16 +86,24 @@ class Curl
 		$ch = curl_init($url);
 		//判断PHP版本,以便使用兼容curl文件上传
 		if (class_exists('CURLFile')) {
-			$data[$file] = new \CURLFile($data[$file], '', '');
+			$mime        = mime_content_type($data[$file]);
+			$info        = pathinfo($data[$file]);
+			$name        = $info['basename'];
+			$data[$file] = new \CURLFile($data[$file], $mime, $name);
 			curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
 		} else {
 			$data[$file] = "@" . $data[$file];
 		}
-		//        var_dump($file);exit();
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt_array($ch, array(
+			CURLOPT_POST           => 1,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POSTFIELDS     => http_build_query($data),
+		));
 		$result['body'] = curl_exec($ch);
 		$result['info'] = curl_getinfo($ch);
+		if (curl_errno($ch)) {
+			$result['error'] = curl_error($ch);
+		}
 		curl_close($ch);
 		return $return ? $result : $result['body'];
 	}
