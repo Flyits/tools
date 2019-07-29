@@ -12,11 +12,17 @@ namespace flyits\tool;
 class Curl
 {
 	/**
+	 *
+	 * @var string
+	 */
+	private static $instance = null;
+	
+	/**
 	 * @param string $url
 	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @return bool|mixed
 	 */
-	public static function get(string $url, int $return = 0)
+	public function get(string $url, int $return = 0)
 	{
 		$ch = curl_init();
 		if (stripos($url, "https://") !== FALSE) {
@@ -43,7 +49,7 @@ class Curl
 	 * @param int    $return 返回响应数据或包含状态等全部数据
 	 * @return mixed
 	 */
-	public static function post(string $url, array $data = [], string $type = 'json', int $return = 0)
+	public function post(string $url, array $data = [], string $type = 'json', int $return = 0)
 	{
 		$data_string = json_encode($data, JSON_UNESCAPED_UNICODE);
 		$ch          = curl_init();
@@ -81,7 +87,7 @@ class Curl
 	 * @throws
 	 * @return mixed
 	 */
-	public static function postFile(string $url, array $data, string $file = 'media', int $return = 0)
+	public function postFile(string $url, array $data, string $file = 'media', int $return = 0)
 	{
 		$ch = curl_init($url);
 		//判断PHP版本,以便使用兼容curl文件上传
@@ -106,5 +112,21 @@ class Curl
 		}
 		curl_close($ch);
 		return $return ? $result : $result['body'];
+	}
+	
+	public function __call($name, $arguments)
+	{
+		// TODO: Implement __call() method.
+	}
+	
+	public static function __callStatic($name, $arguments)
+	{
+		// TODO: Implement __callStatic() method.
+		if (is_null(self::$instance)) {
+			self::$instance = new static();
+			call_user_func_array([self::$instance, $name], $arguments);
+		} else {
+			call_user_func_array([self::$instance, $name], $arguments);
+		}
 	}
 }
